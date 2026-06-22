@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id         String   @id @default(uuid())
+  name       String
+  category   String
+  price      Float
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // Used when filtering by category
+  @@index([category, created_at(sort: Desc), id(sort: Desc)])
+  
+  // Used for the main, unfiltered feed
+  @@index([created_at(sort: Desc), id(sort: Desc)])
+}
